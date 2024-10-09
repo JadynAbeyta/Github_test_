@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "Lesson1GIT"
 author: "Jadyn Abeyta"
@@ -85,3 +86,92 @@ print(t_test_result)
 
 ```
 
+=======
+---
+title: "Lesson1GIT"
+author: "Jadyn Abeyta"
+date: "2024-10-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Set up
+```{r}
+packageLoad <-
+  function(x) {
+    for (i in 1:length(x)) {
+      if (!x[i] %in% installed.packages()) {
+        install.packages(x[i])
+      }
+      library(x[i], character.only = TRUE)
+    }
+  }
+
+# create a string of package names
+packages <- c('tidyverse',
+              'palmerpenguins',
+              'lterdatasampler')
+
+packageLoad(packages)
+
+```
+assignment
+```{r}
+data("knz_bison")
+```
+Create a new column in the bison dataset that calculates the individual's age at the time of observation.
+```{r}
+str(knz_bison)
+head(knz_bison)
+bison_age <- knz_bison %>%
+  mutate(age_at_observation = rec_year - animal_yob)
+
+```
+2.  Write a function that will first filter the bison dataset based on any user-specified weight threshold (returning the filtered dataset).
+```{r}
+filter_bison_by_weight <- function(knz_bison, weight_threshhold) {
+  if (!"animal_weight" %in% names(knz_bison)) {
+    stop("The dataset does not contain a 'weight' column.")
+  }
+  
+  filtered_bison <- knz_bison %>%
+    filter(animal_weight >= weight_threshhold)
+  
+  return(filtered_bison)
+}
+
+filtered_bison <- filter_bison_by_weight(knz_bison, 500)
+
+head(filtered_bison)
+
+```
+3.  Create a boxplot showing weight distribution between male and female bison, and then conduct a t-test to see if weight is significantly difference between males and females.
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Ensure that 'Weight' and 'Sex' columns exist in the dataset
+# Adjust the column names as per your dataset structure
+names(knz_bison)  # Check for exact column names (e.g., weight and sex)
+
+# Create a boxplot for weight distribution between males and females
+ggplot(knz_bison, aes(x = animal_sex, y = animal_weight, fill = animal_sex)) +
+  geom_boxplot() +
+  labs(title = "Weight Distribution by Sex in Bison",
+       x = "Sex",
+       y = "Weight (kg)") +
+  theme_minimal()
+
+# Conduct a t-test to compare weight between males and females
+# Ensure that Sex is coded correctly (e.g., "Male" and "Female")
+t_test_result <- t.test(animal_weight ~ animal_sex ,data = knz_bison)
+
+# Print the t-test result
+print(t_test_result)
+
+```
+
+>>>>>>> 37d130fe6610136147227a898e8a5a6525ec8f31
